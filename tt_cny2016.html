@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CNY 2016</title>
+
+		<style>
+			#cny_overlay
+			{
+				top:0px;
+				left:0px;
+				width:100%;
+				height:100%;
+				position:fixed;
+				background-color:rgba(200,200,200,0.2);
+			}
+
+			#cny_container
+			{
+				width:80%;
+				height:80%;
+				top:10%;
+				left:10%;
+				border-radius:20px;
+				position:absolute;
+				background-color:rgba(200,200,200,1);
+			}
+
+			#year_wrapper
+			{
+				width:800px;
+				height:200px;
+				margin-top:10%;
+				margin-left: auto;
+				margin-right: auto;
+				position:relative;
+				overflow:visible;
+			}
+
+			.yeardigit_wrapper
+			{
+				width:200px;
+				height:200px;
+				float:left;
+				text-align: center;
+				font-size:180px;
+				font-weight:bold;
+				font-family:verdana;
+			}
+
+			#monkey_wrapper
+			{
+				width:200px;
+				height:200px;
+				background-color:#000000;
+				border-radius:50%;
+				float:left;
+			}
+
+			#message_wrapper
+			{
+				width:800px;
+				height:100px;
+				margin-top:20px;
+				margin-left: auto;
+				margin-right: auto;
+				position:relative;
+				text-align:center;
+				font-size:30px;
+				font-weight:bold;
+				font-family:verdana;
+				color:rgba(254,254,0,0);
+				transition: all 1s;
+				-webkit-transition: all 1s;
+			}
+
+			#time_wrapper
+			{
+				width:330px;
+				margin:5% auto 0 auto;
+				text-align:center;
+				font-family:verdana;
+				font-weight:bold;
+				font-size:30px;
+				color:rgba(0,0,0,1);
+				transition: all 1.5s;
+				transform:perspective(500px) rotateX(0deg);
+				transform-origin:50% 50%;
+				-webkit-perspective-origin:50% 100%;
+				-webkit-transition: all 1.5s;
+				-webkit-transform:perspective(500px) rotateX(0deg);
+				-webkit-transform-origin:50% 50%;
+				-webkit-perspective-origin:50% 100%;
+			}
+
+			.digitbox
+			{
+				width:30px;
+				height:60px;
+				font-size:40px;
+				float:left;
+				text-align:center;
+			}
+
+			.smallbox
+			{
+				width:60px;
+				height:60px;
+				font-size:15px;
+				text-align:center;
+				float:left;
+			}
+
+			.monkey
+			{
+				position:absolute;
+				-webkit-border-radius: 63px 63px 63px 63px / 108px 108px 72px 72px;
+				border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+			}
+
+			#monkey_brow1
+			{ 		
+				width:60px;
+				height:10px;		
+				box-shadow: 5px -5px 0 0 black; 
+				margin-left:27px;
+				margin-top:70px;
+			}
+
+			#monkey_brow2
+			{ 		
+				width:60px;
+				height:10px;		
+				box-shadow: -5px -5px 0 0 black; 
+				margin-left:113px;
+				margin-top:70px;
+			}
+
+			#monkey_eye1
+			{ 		
+				width:20px;
+				height:15px;		
+				box-shadow: -15px -15px 0 0 black; 
+				margin-left:70px;
+				margin-top:80px;
+			}
+
+			#monkey_eye2
+			{ 		
+				width:20px;
+				height:15px;		
+				box-shadow: 15px -15px 0 0 black; 
+				margin-left:110px;
+				margin-top:80px;
+			}
+
+			#monkey_nostril1
+			{ 		
+				width:20px;
+				height:6px;		
+				box-shadow: 5px -4px 0 0 black; 
+				margin-left:70px;
+				margin-top:90px;
+				transform:rotate(10deg);
+				-webkit-transform:rotate(10deg);
+			}
+
+			#monkey_nostril2
+			{ 		
+				width:20px;
+				height:6px;		
+				box-shadow: -5px -4px 0 0 black; 
+				margin-left:110px;
+				margin-top:90px;
+				transform:rotate(-10deg);
+				-webkit-transform:rotate(-10deg);
+			}
+
+			#monkey_lip
+			{ 		
+				width:95px;
+				height:15px;		
+				box-shadow: 5px -5px 0 0 black; 
+				margin-left:50px;
+				margin-top:135px;
+			}
+
+			.monkey_face
+			{
+				border-radius:50%;
+				background-color:#FFFFFF;
+			}
+		</style>
+
+		<script>
+			var countdowntimer;
+			var cnydate=new Date(2016,1,15,8,0,0,0); 
+			var nowdate=new Date();
+			var ms; 
+
+			var trembletimer;
+
+			function initialize()
+			{
+				var s,h,m,d;
+				ms=cnydate-nowdate;				
+
+				if (ms>0)
+				{
+					s=Math.floor(ms/1000);
+					m=(s-(s%60))/60;
+					s=s%60;
+					h=(m-(m%60))/60;
+					m=m%60;
+					d=(h-(h%24))/24;
+					h=h%24;
+
+					document.getElementById("day_wrapper1").innerHTML=(d-(d%10))/10;
+					document.getElementById("day_wrapper2").innerHTML=d%10;
+					document.getElementById("hour_wrapper1").innerHTML=(h-(h%10))/10;
+					document.getElementById("hour_wrapper2").innerHTML=h%10;
+					document.getElementById("minute_wrapper1").innerHTML=(m-(m%10))/10;
+					document.getElementById("minute_wrapper2").innerHTML=m%10;
+					document.getElementById("second_wrapper1").innerHTML=(s-(s%10))/10;
+					document.getElementById("second_wrapper2").innerHTML=s%10;	
+			
+					countdowntimer=setInterval(function(){timer_decrement("second",2);},1000);
+				}
+				else
+				{
+					setTimeout(function(){start_animation();},2000);
+				}
+			}
+
+
+			function timer_decrement(vartype,varno)
+			{
+				ms-=1000;
+
+				if (ms<=0)
+				{
+					var digitboxes=[],smallboxes=[];
+					digitboxes=document.getElementsByClassName("digitbox");
+
+					for (i=0;i<digitboxes.length;i++)
+					{
+						if (!isNaN(digitboxes[i].innerHTML))
+						{
+							digitboxes[i].innerHTML="0";
+						}
+					}
+
+					setTimeout(function(){start_animation();},2000);
+				}
+				else
+				{
+					var wrapper;
+
+					if (vartype=="second")
+					{
+						wrapper=document.getElementById(vartype+"_wrapper"+varno);
+
+						if (wrapper.innerHTML=="0")
+						{
+							if (varno==1)
+							{
+								wrapper.innerHTML="5";
+								timer_decrement("minute",2);
+							}
+
+							if (varno==2)
+							{
+								wrapper.innerHTML="9";
+								timer_decrement("second",1);
+							}
+						}
+						else
+						{
+							wrapper.innerHTML=parseInt(wrapper.innerHTML)-1;
+						}
+					}
+
+					if (vartype=="minute")
+					{
+						wrapper=document.getElementById(vartype+"_wrapper"+varno);
+
+						if (wrapper.innerHTML=="0")
+						{
+							if (varno==1)
+							{
+								wrapper.innerHTML="5";
+								timer_decrement("hour",2);
+							}
+
+							if (varno==2)
+							{
+								wrapper.innerHTML="9";
+								timer_decrement("minute",1);
+							}
+						}
+						else
+						{
+							wrapper.innerHTML=parseInt(wrapper.innerHTML)-1;
+						}
+					}
+
+					if (vartype=="hour")
+					{
+						wrapper=document.getElementById(vartype+"_wrapper"+varno);
+
+						if (wrapper.innerHTML=="0")
+						{
+							if (varno==1)
+							{
+								wrapper.innerHTML="2";
+								timer_decrement("day",2);
+							}
+
+							if (varno==2)
+							{
+								wrapper.innerHTML="3";
+								timer_decrement("hour",1);
+							}
+						}
+						else
+						{
+							wrapper.innerHTML=parseInt(wrapper.innerHTML)-1;
+						}
+					}
+
+					if (vartype=="day")
+					{
+						wrapper=document.getElementById(vartype+"_wrapper"+varno);
+
+						if (wrapper.innerHTML=="0")
+						{
+							if (varno==2)
+							{
+								wrapper.innerHTML="9";
+								timer_decrement("day",1);
+							}
+						}
+						else
+						{
+							wrapper.innerHTML=parseInt(wrapper.innerHTML)-1;
+						}
+					}
+				}
+			}
+
+			function start_animation()
+			{
+				clearInterval(countdowntimer);
+
+				document.getElementById("time_wrapper").style.transform="perspective(500px) rotateX(360deg)";
+				document.getElementById("time_wrapper").style.WebkitTransform="perspective(500px) rotateX(360deg)";
+				document.getElementById("time_wrapper").style.color="rgba(0,0,0,0)";
+
+				setTimeout(function(){document.getElementById("time_wrapper").style.display="none";},1500);
+				setTimeout(function(){document.getElementById("year_wrapper").style.display="block";},1500);
+				setTimeout(function(){tremble(20,0);},1550);
+				setTimeout(function(){document.getElementById("message_wrapper").style.color="rgba(254,100,0,1)";},1600);
+			}
+
+			function tremble(varvariance,varvalue)
+			{
+				if (varvalue<varvariance)
+				{
+					trembletimer=setTimeout(function(){tremblingdigits(varvariance,varvalue);},50);
+				}
+			}
+
+			function tremblingdigits(varvariance,varvalue)
+			{
+				clearTimeout(trembletimer);
+
+				if (varvalue<varvariance)
+				{
+					var digits=document.getElementsByClassName("yeardigit_wrapper");
+					var monkey=document.getElementById("monkey_wrapper");
+
+					for (var i=0;i<digits.length;i++)
+					{
+						digits[i].style.marginTop=(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"px";
+						digits[i].style.transform="rotate("+(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"deg)";	
+						digits[i].style.WebkitTransform="rotate("+(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"deg)";	
+					}
+
+					monkey.style.marginTop=(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"px";
+					monkey.style.transform="rotate("+(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"deg)";
+					monkey.style.WebkitTransform="rotate("+(generaterandomno(0,varvariance-varvalue)*(generaterandomno(0,1)==0?-1:1))+"deg)";
+					trembletimer=setTimeout(function(){tremblingdigits(varvariance,varvalue+1);},50);
+				}
+			}
+
+			function generaterandomno(varmin,varmax)
+			{
+				return Math.floor((Math.random() * (varmax-varmin+1)) + varmin);
+			}
+		</script>
+	</head>
+
+	<body onload="initialize();" style="background-color:#000044">
+		<div id="cny_overlay" onclick="this.style.display='none';">
+			<div id="cny_container">
+				<div id="year_wrapper" style="display:none;">
+					<div class="yeardigit_wrapper">2</div>
+					<div id="monkey_wrapper">
+						<div class="monkey monkey_face" style="width:90px;height:90px;margin-left:20px;margin-top:30px;"></div>
+						<div class="monkey monkey_face" style="width:90px;height:90px;margin-left:90px;margin-top:30px;"></div>
+						<div class="monkey monkey_face" style="width:140px;height:140px;margin-left:30px;margin-top:50px;"></div>
+						<div id="monkey_brow1" class="monkey"></div>
+						<div id="monkey_brow2" class="monkey"></div>
+						<div id="monkey_eye1" class="monkey"></div>
+						<div id="monkey_eye2" class="monkey"></div>
+						<div id="monkey_nostril1" class="monkey"></div>
+						<div id="monkey_nostril2" class="monkey"></div>
+						<div id="monkey_lip" class="monkey"></div>	
+					</div>
+					<div class="yeardigit_wrapper">1</div>
+					<div class="yeardigit_wrapper">6</div>
+				</div>
+				<div id="message_wrapper">
+					T___T wishes you a happy and prosperous CNY!
+				</div>
+
+				<div id="time_wrapper">
+					<div id="day_wrapper1" class="digitbox">0</div>
+					<div id="day_wrapper2" class="digitbox">0</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="hour_wrapper1" class="digitbox">0</div>
+					<div id="hour_wrapper2" class="digitbox">0</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="minute_wrapper1" class="digitbox">0</div>
+					<div id="minute_wrapper2" class="digitbox">0</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="second_wrapper1" class="digitbox">0</div>
+					<div id="second_wrapper2" class="digitbox">0</div>
+					<br style="clear:both"/>
+					<div id="days" class="smallbox">days</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="hours" class="smallbox">hours</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="minutes" class="smallbox">mins</div>
+					<div class="digitbox">&nbsp;</div>
+					<div id="seconds" class="smallbox">secs</div>
+					<br style="clear:both"/>
+					to the Year of the Monkey
+				</div>
+			</div>
+		</div>
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</body>
+</html>
